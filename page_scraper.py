@@ -28,30 +28,7 @@ def folder_nav(dir):
             quit()
     os.chdir(dir)
 
-# get to scraping
-import urllib.request
-from bs4 import BeautifulSoup
-def get_site_data(url):
-    # returns dictionary of headers and paragraphs
-    page_dict = {}
-    try:
-        request = urllib.request.Request(url)
-        page = urllib.request.urlopen(request)
-        if Verbose: print (page.read().decode('utf-8'))
-        soup = BeautifulSoup(page, 'html.parser')
-    except Exception as ex:
-        print(f'Error - website {url} not reached.')
-        print(ex)
-        page_dict.update( {'page' : -1} )
-        return page_dict
-    if Verbose:
-        print(soup.prettify())
-    # for section in soup.find_all('tr'):
-    #
-    #     page_dict.update( {section: } )
-    return page_dict
-
-def get_pages(file):
+def get_pages_from_file(file):
     # get url list from input file
     folder_nav(input_dir)
     sites = []
@@ -68,12 +45,44 @@ def get_pages(file):
         print(ex)
         quit()
 
+# get to scraping
+from urllib.request import urlopen, Request
+from bs4 import BeautifulSoup
+import pandas as pd
+from tabulate import tabulate
+# fake "real" browser to avoid bad site response
+headers={
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
+    }
+def get_site_data(url):
+    # returns dictionary of headers and paragraphs
+    page_dict = {}
+    req = Request(
+        url,
+        data=None,
+        headers=headers
+        )
+    try:
+        page = urlopen(req)
+        soup = BeautifulSoup(page, 'html.parser')
+        # TO DO: return -1 if outdated browser response
+    except Exception as ex:
+        print(f'Error - website {url} not reached.')
+        print(ex)
+        page_dict.update( {'page' : -1} )
+        return page_dict
+    table = soup.find_all('table')[0]
+    df = pd.read_html(str(table))
+    if Verbose:
+        print(soup.prettify())
+        print( tabulate(df[0], headers='keys', tablefmt='psql') )
+    return df
+
 # main
-parser_sites = get_pages(input_file)
+cases = pd.DataFrame()
+parser_sites = get_pages_from_file(input_file)
 for page in parser_sites:
     if Verbose:
         print(f"Working on {page}")
-    get_site_data(page)
-
-
-import re
+    cases = pd.concat(cases, get_site_data(page))
+print(cases)

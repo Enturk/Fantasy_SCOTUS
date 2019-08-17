@@ -1,6 +1,7 @@
 # Data
 *.csv
 *.txt
+*.json
 unused/
 
 # Byte-compiled / optimized / DLL files

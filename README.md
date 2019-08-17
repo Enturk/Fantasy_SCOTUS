@@ -29,7 +29,7 @@ Next, we need to take in the ballots, for which we use the Google Forms API:
 ```
 COMING SOON!
 ```
-Finally, I'm using the Google Sheets API to output the results:
+Finally, I'm using the Google Sheets API to output the results. You'll have to go to [this page](https://developers.google.com/sheets/api/quickstart/python), click on the button to activate the API, and then install it locally thusly:
 ```
 pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 ```

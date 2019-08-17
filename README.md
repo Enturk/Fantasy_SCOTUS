@@ -21,15 +21,11 @@ Also, this uses [pandas dataframes](https://pandas.pydata.org/) to juggle the da
 ```
 python3 -m pip install --upgrade pandas
 ```
-And Tabulate because I'm lazy:
+And Tabulate to make the pretty tables viewable when testing:
 ```
 pip3 install tabulate
 ```
-Next, we need to take in the ballots, for which we use the Google Forms API:
+Now we want to push the results to a spreadsheet. Follow [these instructions to get gspread-pandas working](https://pypi.org/project/gspread-pandas/):
 ```
-COMING SOON!
-```
-Finally, I'm using the Google Sheets API to output the results. You'll have to go to [this page](https://developers.google.com/sheets/api/quickstart/python), click on the button to activate the API, and then install it locally thusly:
-```
-pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+pip3 install gspread-pandas
 ```

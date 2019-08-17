@@ -81,6 +81,10 @@ def get_site_data(url):
         print(df)
     return df
 
+# other options are to work directly with Google API:
+# https://developers.google.com/sheets/api/quickstart/python
+# https://developers.google.com/sheets/api/guides/values
+# But we're trying gspread_pandas for now
 # for this to work, manage API here:
 # https://console.developers.google.com/apis/credentials
 from gspread_pandas import Spread, conf

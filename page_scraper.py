@@ -1,6 +1,8 @@
 # main variables
 input_dir = ""
+term = 2019
 input_file = "sources.txt"
+input_file = str(term) + "_" + input_file
 if __name__ == "__main__":
     Verbose = True
 else:
@@ -39,11 +41,11 @@ def get_pages_from_file(file):
                 line = line.strip()
                 if len(line)>0:
                     sites.append(line)
-                return sites
     except Exception as ex:
         print(f'Fatal error - file {file} not found in {input_dir} and cannot be created.')
         print(ex)
         quit()
+    return sites
 
 # get to scraping
 from urllib.request import urlopen, Request
@@ -74,15 +76,50 @@ def get_site_data(url):
     table = soup.find_all('table')[0]
     df = pd.read_html(str(table))
     if Verbose:
-        print(soup.prettify())
-        print( tabulate(df[0], headers='keys', tablefmt='psql') )
+        # print(soup.prettify())
+        # print( tabulate(df[0], headers='keys', tablefmt='psql') )
+        print(df)
     return df
 
+# for this to work, manage API here:
+# https://console.developers.google.com/apis/credentials
+from gspread_pandas import Spread, conf
+cred = conf.get_config(script_dir, "default.json")
+def send_2_sheets(df, sheet):
+    # This will ask to authenticate if you haven't done so before
+    spread = Spread("fantasyscotus@fantasyscotus.iam.gserviceaccount.com",
+                    sheet,
+                    config = cred)
+    # This will show available sheets:
+    if Verbose:
+        spread.sheets
+    # Save DataFrame to worksheet 'New Test Sheet', create it first if it doesn't exist
+    spread.df_to_sheet(df, index=False, sheet=sheet, start='A2', replace=True)
+    spread.update_cells('A1', 'A1', ['Created by:', spread.email])
+    if Verbose:
+        print(spread)
+
 # main
-cases = pd.DataFrame()
+cases = pd.DataFrame(columns = ['Docket No.',
+                                'Op. Below',
+                                'Argument',
+                                'Opinion',
+                                'Vote',
+                                'Author',
+                                'Term'])
 parser_sites = get_pages_from_file(input_file)
+# during testing, skip first case
+first_test_case = Verbose
 for page in parser_sites:
     if Verbose:
         print(f"Working on {page}")
-    cases = pd.concat(cases, get_site_data(page))
-print(cases)
+    if first_test_case:
+        first_test_case = False
+    new_case = get_site_data(page)
+    if new_case:
+        cases = cases.append(new_case, sort=False)
+    else:
+        print(f'Error - site at {page} did not return a table.')
+if Verbose:
+    print( tabulate(cases, headers='keys', tablefmt='psql') )
+send_2_sheets(cases, str(term) + "_Fantasy_SCOTUS")

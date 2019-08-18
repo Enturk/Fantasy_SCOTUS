@@ -1,5 +1,5 @@
 # Fantasy_SCOTUS
-Python project scraping web results and using the Google API to manage a Fantasy SCOTUS League.
+Python project scraping web results and using the Google API to manage [a Fantasy SCOTUS League](https://cgttsc.wordpress.com/2015/10/14/citizens-guide-scotus-fantasy-league-rules-and-disclosures/). The [Citizen's Guide to the Supreme Court](https://cgttsc.wordpress.com/) has run a ramshackle contest every Supreme Court term for the past couple of years, where listeners compete to try to be the one who guesses the most points worth of correctness. Guessing which party gets the better end of things is 15 points, guessing how many justices vote for the majority gets 25 points, and guessing the majority author gets you 30 points, over a handful of cases selected by the hosts each month. Ballots are collected via a google form which were, for now, put into spreadsheets to calculate winners. 
 
 # Warning
 This script will not scrape websites that don't want to be scraped. I'm not that guy.

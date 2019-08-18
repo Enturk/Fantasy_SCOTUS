@@ -29,3 +29,10 @@ Now we want to push the results to a spreadsheet. Follow [these instructions to 
 ```
 pip3 install gspread-pandas
 ```
+
+# Comments welcome!
+This is a spare time project, but I'm looking for ideas about everything, particularly these parts: 
+* The right way to scrape a website. Beautiful soup used to be it, but now there's [Mechanize](https://github.com/sparklemotion/mechanize), [MechanicalSoup](https://github.com/MechanicalSoup/MechanicalSoup), and there are ethical concerns that I'm not sure how to negotiate. Oyez.com, for example, seems to respond to all my scraping attempts with an invitation to use a better browser. I'm guessing this is a way to dissuade me from scraping it, so I'm focusing on scotusblog.
+* The right way to push the information to google sheets. This is more a matter of just getting it to work, I think. But my very brief initial attempts have been unsuccessful, but I think I've been lazy. I should probably just use the API directly instead of using a library.
+* The need to build a better interface. Any website will eventually make changes, and it would be nice to log request responses to build an easier way to adapt to those changes. 
+* Some natural language processing might be helpful. I'm eyeballing [SpaCy](https://spacy.io/) for that, but I don't have much of a plan here. 
